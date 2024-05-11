@@ -16,6 +16,7 @@ import Modal from 'react-native-modal';
 import COLORS from '../Constant/Color';
 import AnimatedButton from '../Constant/Button';
 import Octicons from 'react-native-vector-icons/Octicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Color from '../Constant/Color';
 import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker, PROVIDER_GOOGLE, Polygon} from 'react-native-maps';
@@ -23,7 +24,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 
 const Home = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const [acc, setacc] = useState(true);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -177,6 +178,29 @@ const Home = ({navigation}) => {
             placeholderTextColor={Color.black}
           />
         </View>
+      </View>
+      <View style={{position: 'absolute', bottom: '5%', alignSelf: 'center'}}>
+        {acc ? (
+          <TouchableOpacity
+            onPress={() => {
+              setacc(!acc);
+            }}>
+            <Text style={{fontSize: 20, fontWeight: '600', color: 'red'}}>
+              <AntDesign name="poweroff" size={25} color="red" />
+              Offline
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setacc(!acc);
+            }}>
+            <Text style={{fontSize: 20, fontWeight: '600', color: 'green'}}>
+              <AntDesign name="poweroff" size={25} color="green" />
+              Online
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View>
         <Button title="Show modal" onPress={toggleModal} />

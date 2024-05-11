@@ -227,10 +227,10 @@ const AddVehicleScreen = ({navigation}) => {
                 ]}>
                 <Text style={{color: 'black'}}>
                   {' '}
-                  Uplaod your Driver License
+                  Upload your Driver License
                 </Text>
                 <TouchableOpacity onPress={handleChoosePhoto}>
-                  <Text style={styles.upload}>Uplaod</Text>
+                  <Text style={styles.upload}>Upload</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -249,9 +249,9 @@ const AddVehicleScreen = ({navigation}) => {
                   styles.input,
                   {flexDirection: 'row', justifyContent: 'space-between'},
                 ]}>
-                <Text style={{color: 'black'}}> Uplaod your RC</Text>
+                <Text style={{color: 'black'}}> Upload your RC</Text>
                 <TouchableOpacity onPress={handleChoosePhoto}>
-                  <Text style={styles.upload}>Uplaod</Text>
+                  <Text style={styles.upload}>Upload</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -270,9 +270,9 @@ const AddVehicleScreen = ({navigation}) => {
                   styles.input,
                   {flexDirection: 'row', justifyContent: 'space-between'},
                 ]}>
-                <Text style={{color: 'black'}}> Uplaod your Emission</Text>
+                <Text style={{color: 'black'}}> Upload your Emission</Text>
                 <TouchableOpacity onPress={handleChoosePhoto}>
-                  <Text style={styles.upload}>Uplaod</Text>
+                  <Text style={styles.upload}>Upload</Text>
                 </TouchableOpacity>
               </View>
             </View>
