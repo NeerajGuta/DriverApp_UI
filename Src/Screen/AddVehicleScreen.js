@@ -68,8 +68,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Vehicle Brand
               </Text>
@@ -93,8 +94,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Vehicle Modal
               </Text>
@@ -118,8 +120,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Select Fuel Type
               </Text>
@@ -144,8 +147,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Vehicle Color
               </Text>
@@ -164,8 +168,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Vehicle Registration Date
               </Text>
@@ -189,8 +194,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Vehicle Insurance Date
               </Text>
@@ -214,8 +220,31 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
+                }}>
+                Vehicle Image
+              </Text>
+
+              <View
+                style={[
+                  styles.input,
+                  {flexDirection: 'row', justifyContent: 'space-between'},
+                ]}>
+                <Text style={{color: 'black'}}> Upload your Vehicle Image</Text>
+                <TouchableOpacity onPress={handleChoosePhoto}>
+                  <Text style={styles.upload}>Upload</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{marginBottom: 8}}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Driver License Doc
               </Text>
@@ -238,8 +267,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 RC Doc
               </Text>
@@ -259,8 +289,9 @@ const AddVehicleScreen = ({navigation}) => {
               <Text
                 style={{
                   fontSize: 16,
-                  fontWeight: 400,
+                  fontWeight: 600,
                   marginVertical: 8,
+                  color: Color.black,
                 }}>
                 Emission Doc
               </Text>

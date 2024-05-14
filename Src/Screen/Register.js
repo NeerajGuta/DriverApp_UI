@@ -129,7 +129,7 @@ const Register = ({navigation}) => {
   const onselect2 = () => {
     ImagePicker.openPicker({
       width: 300,
-      height: 400,
+      height: 600,
       cropping: true,
     }).then(profile => {
       setprofile(profile);
@@ -182,8 +182,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   User Name
                 </Text>
@@ -203,8 +204,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Email
                 </Text>
@@ -224,8 +226,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Mobile No
                 </Text>
@@ -245,8 +248,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Gender
                 </Text>
@@ -302,8 +306,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Date Of Birth
                 </Text>
@@ -327,8 +332,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   House No
                 </Text>
@@ -348,8 +354,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Address
                 </Text>
@@ -370,8 +377,9 @@ const Register = ({navigation}) => {
                   <Text
                     style={{
                       fontSize: 16,
-                      fontWeight: 400,
+                      fontWeight: 600,
                       marginVertical: 8,
+                      color: Color.black,
                     }}>
                     Select Country:
                   </Text>
@@ -395,8 +403,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Select State:
                 </Text>
@@ -422,8 +431,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Enter City Name:
                 </Text>
@@ -441,8 +451,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Addhar Card No
                 </Text>
@@ -462,8 +473,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Pan Card No
                 </Text>
@@ -483,8 +495,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Addhar Card Copy
                 </Text>
@@ -504,8 +517,9 @@ const Register = ({navigation}) => {
                 <Text
                   style={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     marginVertical: 8,
+                    color: Color.black,
                   }}>
                   Pan Card Copy
                 </Text>

@@ -87,7 +87,7 @@ export default function Menu({navigation}) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ChangePassword');
+                navigation.navigate('NewPassword');
               }}
               style={styles.row}>
               <View style={[styles.rowIcon, {backgroundColor: '#32c759'}]}>

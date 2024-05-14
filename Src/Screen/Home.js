@@ -178,30 +178,29 @@ const Home = ({navigation}) => {
             placeholderTextColor={Color.black}
           />
         </View>
+        <View style={styles.iconmenu1}>
+          {acc ? (
+            <TouchableOpacity
+              onPress={() => {
+                setacc(!acc);
+              }}>
+              <Text style={{fontSize: 20, fontWeight: '600', color: 'red'}}>
+                <AntDesign name="poweroff" size={25} color="red" />
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setacc(!acc);
+              }}>
+              <Text style={{fontSize: 20, fontWeight: '600', color: 'green'}}>
+                <AntDesign name="poweroff" size={25} color="green" />
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-      <View style={{position: 'absolute', bottom: '5%', alignSelf: 'center'}}>
-        {acc ? (
-          <TouchableOpacity
-            onPress={() => {
-              setacc(!acc);
-            }}>
-            <Text style={{fontSize: 20, fontWeight: '600', color: 'red'}}>
-              <AntDesign name="poweroff" size={25} color="red" />
-              Offline
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              setacc(!acc);
-            }}>
-            <Text style={{fontSize: 20, fontWeight: '600', color: 'green'}}>
-              <AntDesign name="poweroff" size={25} color="green" />
-              Online
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
+
       <View>
         <Button title="Show modal" onPress={toggleModal} />
 
@@ -331,12 +330,10 @@ const styles = StyleSheet.create({
   circle: {
     backgroundColor: 'white',
     flex: 1,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    borderTopRightRadius: 10,
-    borderBottomRightRadius: 10,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderRightWidth: 1,
@@ -420,5 +417,26 @@ const styles = StyleSheet.create({
     shadowRadius: 11.95,
     elevation: 5,
     borderRadius: 5,
+  },
+  iconmenu1: {
+    height: 57,
+    width: 40,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 11,
+    },
+    shadowOpacity: 0.57,
+    shadowRadius: 15.19,
+    elevation: 35,
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#dbd3d340',
   },
 });

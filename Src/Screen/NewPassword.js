@@ -12,6 +12,7 @@ import COLORS from '../Constant/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AnimatedButton from '../Constant/Button';
 import Feather from 'react-native-vector-icons/Feather';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useNavigation} from '@react-navigation/native';
 
 const NewPassword = () => {
@@ -53,12 +54,40 @@ const NewPassword = () => {
         </View>
 
         <View style={styles.logins}>
+          <View style={{marginBottom: 8}}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: 600,
+                marginVertical: 8,
+                color: COLORS.black,
+              }}>
+              Email
+            </Text>
+            <Fontisto
+              name="email"
+              size={20}
+              style={styles.icons}
+              color={COLORS.buttonColor}
+            />
+            <View style={styles.input}>
+              <TextInput
+                placeholder="Enter your email addres"
+                placeholderTextColor={COLORS.black}
+                keyboardType="email-address"
+                style={{
+                  width: '100%',
+                }}
+              />
+            </View>
+          </View>
           <View style={{marginBottom: 12}}>
             <Text
               style={{
                 fontSize: 16,
-                fontWeight: 400,
+                fontWeight: 600,
                 marginVertical: 8,
+                color: COLORS.black,
               }}>
               Password
             </Text>
@@ -70,7 +99,7 @@ const NewPassword = () => {
             />
             <View style={styles.input}>
               <TextInput
-                placeholder="Enter your password"
+                placeholder="Enter your old password"
                 placeholderTextColor={COLORS.black}
                 secureTextEntry={isPasswordShown}
                 style={{
@@ -96,8 +125,9 @@ const NewPassword = () => {
             <Text
               style={{
                 fontSize: 16,
-                fontWeight: 400,
+                fontWeight: 600,
                 marginVertical: 8,
+                color: COLORS.black,
               }}>
               Confirm Password
             </Text>
@@ -109,7 +139,7 @@ const NewPassword = () => {
             />
             <View style={styles.input}>
               <TextInput
-                placeholder="Enter your confirm password"
+                placeholder="Enter your new password"
                 placeholderTextColor={COLORS.black}
                 secureTextEntry={isPasswordShown}
                 style={{

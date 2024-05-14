@@ -11,7 +11,7 @@ import Color from '../Constant/Color';
 
 const Splacescreen = ({navigation}) => {
   setTimeout(() => {
-    navigation.navigate('Phone');
+    navigation.navigate('Register');
   }, 3000);
 
   return (
