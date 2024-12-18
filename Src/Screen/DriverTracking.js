@@ -9,7 +9,6 @@ import MapView, {
   Polyline,
   DirectionsRenderer,
 } from 'react-native-maps';
-
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
 const DriverTracking = ({navigation}) => {
@@ -153,13 +152,13 @@ const DriverTracking = ({navigation}) => {
 
       <View style={{backgroundColor: 'white', paddingHorizontal: 20}}>
         <AnimatedButton
-          title="Verify"
+          title="Stop ride"
           style={{
             marginTop: 28,
             marginBottom: 4,
           }}
           onPress={() => {
-            navigation.navigate('VerifyOtp');
+            navigation.navigate('DropLocation');
           }}
         />
       </View>

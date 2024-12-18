@@ -189,13 +189,13 @@ const VerifyOtp = ({navigation}) => {
           )}
         />
         <AnimatedButton
-          title="Verify"
+          title="Start ride"
           style={{
             marginTop: 28,
             marginBottom: 4,
           }}
           onPress={() => {
-            navigation.navigate('DropLocation');
+            navigation.navigate('DriverTracking');
           }}
         />
       </View>

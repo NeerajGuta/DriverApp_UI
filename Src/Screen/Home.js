@@ -183,6 +183,7 @@ const Home = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 setacc(!acc);
+                toggleModal();
               }}>
               <Text style={{fontSize: 20, fontWeight: '600', color: 'red'}}>
                 <AntDesign name="poweroff" size={25} color="red" />
@@ -202,7 +203,7 @@ const Home = ({navigation}) => {
       </View>
 
       <View>
-        <Button title="Show modal" onPress={toggleModal} />
+        {/* <Button title="Show modal" onPress={toggleModal} /> */}
 
         <Modal isVisible={isModalVisible}>
           <View style={styles.modelPickup}>
@@ -272,7 +273,7 @@ const Home = ({navigation}) => {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('DriverTracking');
+                  navigation.navigate('VerifyOtp');
                   toggleModal();
                 }}>
                 <Text
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
     borderColor: '#dbd3d340',
   },
   iconmenu: {
-    height: 57,
+    height: 59,
     width: 40,
     backgroundColor: 'white',
     justifyContent: 'center',
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   iconmenu1: {
-    height: 57,
+    height: 59,
     width: 40,
     backgroundColor: 'white',
     justifyContent: 'center',

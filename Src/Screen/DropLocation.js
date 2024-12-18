@@ -191,7 +191,7 @@ const DropLocation = ({navigation}) => {
               ]}>
               Price : 349
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Payment')}>
               <Text style={styles.animatedButton}>COMPLETE RIDE</Text>
             </TouchableOpacity>
           </View>

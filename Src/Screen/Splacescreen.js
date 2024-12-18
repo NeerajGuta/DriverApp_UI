@@ -6,13 +6,48 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import Color from '../Constant/Color';
+import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Splacescreen = ({navigation}) => {
-  setTimeout(() => {
-    navigation.navigate('Register');
-  }, 3000);
+  useFocusEffect(
+    useCallback(() => {
+      let timeoutId;
+
+      const checkDriverStatus = async () => {
+        try {
+          let driver = await AsyncStorage.getItem('driver');
+          timeoutId = setTimeout(() => {
+            if (driver) {
+              driver = JSON.parse(driver);
+
+              if (driver.haveVehicle == false) {
+                navigation.navigate('AddVehicleScreen', {
+                  driverID: driver?._id,
+                });
+              } else {
+                navigation.navigate('Home');
+              }
+            } else {
+              navigation.navigate('Login');
+            }
+          }, 2000);
+        } catch (error) {
+          console.error('Error fetching driver data:', error);
+        }
+      };
+
+      checkDriverStatus();
+
+      return () => {
+        // Cleanup: Clear the timeout if the screen becomes unfocused
+        if (timeoutId) clearTimeout(timeoutId);
+        console.log('Screen is unfocused, timeout cleared.');
+      };
+    }, [navigation]),
+  );
 
   return (
     <SafeAreaView

@@ -19,6 +19,8 @@ import ChangePassword from '../Screen/ChangePassword';
 import ChangeOtp from '../Screen/ChangeOtp';
 import NewPassword from '../Screen/NewPassword';
 import PaymentHistory from '../Screen/PaymentHistory';
+import Payment from '../Screen/Payment';
+import Login from '../Screen/Login';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -58,6 +60,11 @@ export default function Navigation() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -118,6 +125,11 @@ export default function Navigation() {
         <Stack.Screen
           name="PaymentHistory"
           component={PaymentHistory}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="Payment"
+          component={Payment}
           options={{headerShown: true}}
         />
       </Stack.Navigator>

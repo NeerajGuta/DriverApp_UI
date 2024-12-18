@@ -98,7 +98,7 @@ const OTP = ({navigation}) => {
                 marginBottom: 4,
               }}
               onPress={() => {
-                navigation.navigate('Register');
+                navigation.navigate('AddVehicleScreen');
               }}
             />
           </View>
