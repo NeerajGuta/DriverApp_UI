@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -13,23 +13,85 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {launchImageLibrary} from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
+import {useFocusEffect} from '@react-navigation/native';
+import axios from 'axios';
+import {useDriverContext} from '../Context/DriverContext'; // Import context
 
 export default function Menu({navigation}) {
-  const [form, setForm] = useState({
-    darkMode: false,
-    emailNotifications: true,
-    pushNotifications: false,
-  });
+  const {setDriverId: setContextDriverId} = useDriverContext(); // Get context function
 
   const [profile, setprofile] = useState();
   const handleChoosePhoto = () => {
-    launchImageLibrary({noData: true}, response => {
+    launchImageLibrary({noData: true}, async response => {
       if (response.assets) {
         setprofile(response.assets[0]);
+        const formData = new FormData();
+        let profiledata = response.assets[0];
+        formData.append('profileimage', {
+          name: profiledata.fileName,
+          type: profiledata.type,
+          uri:
+            Platform.OS === 'ios'
+              ? profiledata.uri.replace('file://', '')
+              : profiledata.uri,
+        });
+        formData.append('userId', driverData?._id);
+        const res = await axios.put(
+          'http://192.168.1.19:8051/api/v1/driver/updatedriver',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            Accept: 'application/json',
+          },
+        );
+        if (res.status == 200) {
+          await AsyncStorage.setItem(
+            'driver',
+            JSON.stringify(res.data.updatedriver),
+          );
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Home'}], // Replace 'CurrentScreenName' with your current screen name
+          });
+        }
       }
     });
   };
+  const [driverData, setDriverData] = useState({});
 
+  useFocusEffect(
+    useCallback(() => {
+      const checkDriverStatus = async () => {
+        try {
+          let driver = await AsyncStorage.getItem('driver');
+
+          if (driver) {
+            driver = JSON.parse(driver);
+            setDriverData(driver);
+          }
+        } catch (error) {
+          console.error('Error fetching driver data:', error);
+        }
+      };
+
+      checkDriverStatus();
+
+      return () => {
+        console.log('Screen is unfocused, timeout cleared.');
+      };
+    }, [navigation]),
+  );
+
+  // console.log('driverData', driverData);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <View style={styles.container}>
@@ -43,7 +105,8 @@ export default function Menu({navigation}) {
             ) : (
               <Image
                 source={{
-                  uri: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80',
+                  uri:
+                    'http://192.168.1.19:8051/User/' + driverData?.profileimage,
                 }}
                 style={styles.profileAvatar}
               />
@@ -59,10 +122,8 @@ export default function Menu({navigation}) {
           </TouchableOpacity>
 
           <View>
-            <Text style={styles.profileName}>Raghavendra Chaubey</Text>
-            <Text style={styles.profileAddress}>
-              123 Maple Street. Singapura, Bangalore
-            </Text>
+            <Text style={styles.profileName}>{driverData?.name}</Text>
+            <Text style={styles.profileAddress}>{driverData?.address}</Text>
           </View>
         </View>
 
@@ -258,8 +319,10 @@ export default function Menu({navigation}) {
         </ScrollView>
         <View style={styles.section}>
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Phone');
+            onPress={async () => {
+              setContextDriverId(null)
+              await AsyncStorage.clear();
+              navigation.navigate('Login');
             }}
             style={styles.row}>
             <View style={[styles.rowIcon, {backgroundColor: 'red'}]}>

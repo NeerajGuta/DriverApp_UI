@@ -21,6 +21,7 @@ import NewPassword from '../Screen/NewPassword';
 import PaymentHistory from '../Screen/PaymentHistory';
 import Payment from '../Screen/Payment';
 import Login from '../Screen/Login';
+import {DriverProvider} from '../Context/DriverContext'; // Import DriverProvider
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,100 +40,102 @@ function MyDrawer() {
 
 export default function Navigation() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splacescreen">
-        <Stack.Screen
-          name="Splacescreen"
-          component={Splacescreen}
-          options={{headerShown: false}}
-        />
+    <DriverProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Splacescreen">
+          <Stack.Screen
+            name="Splacescreen"
+            component={Splacescreen}
+            options={{headerShown: false}}
+          />
 
-        <Stack.Screen
-          name="Phone"
-          component={Phone}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="OTP"
-          component={OTP}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="AddVehicleScreen"
-          component={AddVehicleScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={MyDrawer}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="VerifyOtp"
-          component={VerifyOtp}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="DropLocation"
-          component={DropLocation}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="BookingHistory"
-          component={BookingHistory}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Wallet"
-          component={Wallet}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="DriverTracking"
-          component={DriverTracking}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ChangePassword"
-          component={ChangePassword}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ChangeOtp"
-          component={ChangeOtp}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="NewPassword"
-          component={NewPassword}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="PaymentHistory"
-          component={PaymentHistory}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Payment"
-          component={Payment}
-          options={{headerShown: true}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Phone"
+            component={Phone}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="OTP"
+            component={OTP}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="AddVehicleScreen"
+            component={AddVehicleScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Home"
+            component={MyDrawer}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="VerifyOtp"
+            component={VerifyOtp}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DropLocation"
+            component={DropLocation}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="BookingHistory"
+            component={BookingHistory}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Wallet"
+            component={Wallet}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DriverTracking"
+            component={DriverTracking}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ChangePassword"
+            component={ChangePassword}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ChangeOtp"
+            component={ChangeOtp}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="NewPassword"
+            component={NewPassword}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="PaymentHistory"
+            component={PaymentHistory}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Payment"
+            component={Payment}
+            options={{headerShown: true}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </DriverProvider>
   );
 }

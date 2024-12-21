@@ -232,7 +232,36 @@ const Register = () => {
         title: 'Required',
         textBody: 'Please select your city!',
       });
-
+    if (!profile)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Required',
+        textBody: 'Please select your pofile!',
+      });
+    if (!aadharimg)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Required',
+        textBody: 'Please select your aadhar front!',
+      });
+    if (!aadharimgback)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Required',
+        textBody: 'Please select your aadhar back side!',
+      });
+    if (!pancardimg)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Required',
+        textBody: 'Please select your pan-card!',
+      });
+    if (!driveLicense)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Required',
+        textBody: 'Please select your driver License!',
+      });
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -282,14 +311,17 @@ const Register = () => {
           ? pancardimg.uri.replace('file://', '')
           : pancardimg.uri,
     });
-    formData.append('pancardimgback', {
-      name: pancardimgback.fileName,
-      type: pancardimgback.type,
-      uri:
-        Platform.OS === 'ios'
-          ? pancardimgback.uri.replace('file://', '')
-          : pancardimgback.uri,
-    });
+    if (pancardimgback) {
+      formData.append('pancardimgback', {
+        name: pancardimgback.fileName,
+        type: pancardimgback.type,
+        uri:
+          Platform.OS === 'ios'
+            ? pancardimgback.uri.replace('file://', '')
+            : pancardimgback.uri,
+      });
+    }
+
     formData.append('driveLicense', {
       name: driveLicense.fileName,
       type: driveLicense.type,
@@ -312,9 +344,17 @@ const Register = () => {
       );
 
       if (res.status === 200) {
-        navigation.navigate('AddVehicleScreen', {
-          driverID: res.data.newDriver?._id,
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Success',
+          textBody: 'Successfully registerd',
+          button: 'Ok!',
         });
+        setTimeout(() => {
+          navigation.navigate('AddVehicleScreen', {
+            driverID: res.data.newDriver?._id,
+          });
+        }, 2000);
       }
     } catch (error) {
       if (error.response) {
@@ -343,7 +383,6 @@ const Register = () => {
       }
     }
   };
-  console.log(moment(date).format('DD-MM-YYYY'));
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -362,7 +401,7 @@ const Register = () => {
               </TouchableOpacity>
               <Text
                 style={{fontSize: 17, fontWeight: '600', color: Color.black}}>
-                Enter Personal Details
+                Personal Details
               </Text>
             </View>
             <View style={styles.profile}>

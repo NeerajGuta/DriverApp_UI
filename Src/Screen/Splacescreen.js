@@ -19,7 +19,11 @@ const Splacescreen = ({navigation}) => {
       const checkDriverStatus = async () => {
         try {
           let driver = await AsyncStorage.getItem('driver');
+          let data = await AsyncStorage.getItem('ride');
           timeoutId = setTimeout(() => {
+            if (data) {
+              data = JSON.parse(data);
+            }
             if (driver) {
               driver = JSON.parse(driver);
 
@@ -27,13 +31,15 @@ const Splacescreen = ({navigation}) => {
                 navigation.navigate('AddVehicleScreen', {
                   driverID: driver?._id,
                 });
+              } else if (data) {
+                navigation.navigate(`${data.page}`);
               } else {
                 navigation.navigate('Home');
               }
             } else {
               navigation.navigate('Login');
             }
-          }, 2000);
+          }, 4000);
         } catch (error) {
           console.error('Error fetching driver data:', error);
         }

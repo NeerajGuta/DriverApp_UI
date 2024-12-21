@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   PermissionsAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import {
   CodeField,
@@ -24,17 +25,48 @@ import Color from '../Constant/Color';
 import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker, PROVIDER_GOOGLE, Polygon} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {useDriverContext} from '../Context/DriverContext';
+import haversine from 'haversine';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {
+  ALERT_TYPE,
+  AlertNotificationRoot,
+  Dialog,
+  Toast,
+} from 'react-native-alert-notification';
 
 const CELL_COUNT = 6;
 
 const VerifyOtp = ({navigation}) => {
+  const {
+    driverLocation,
+    getLocation,
+    socket,
+    rideRequest,
+    setRideRequest,
+    acceptRide,
+    rejectRide,
+    setDriverId,
+  } = useDriverContext();
+
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
-
+  useEffect(() => {
+    const check = async () => {
+      let data = await AsyncStorage.getItem('ride');
+      if (data) {
+        data = JSON.parse(data);
+        setRideRequest(data?.ride);
+      }
+    };
+    check();
+    return;
+  }, []);
   const mapRef = useRef();
   const [longi, setlongi] = useState(null);
   const [lati, setlati] = useState(null);
@@ -81,6 +113,10 @@ const VerifyOtp = ({navigation}) => {
           const {latitude, longitude} = position.coords;
           setlongi(longitude);
           setlati(latitude);
+          getLocation({
+            lat: latitude,
+            lng: longitude,
+          });
           if (mapRef) {
             mapRef.current.animateToRegion({
               latitude: latitude,
@@ -99,6 +135,7 @@ const VerifyOtp = ({navigation}) => {
     }
   };
   useEffect(() => {
+    handleGetLocation();
     const interval = setInterval(() => {
       handleGetLocation();
     }, 4000);
@@ -125,10 +162,30 @@ const VerifyOtp = ({navigation}) => {
       console.error('Error getting geocoding data:', error);
     }
   };
+  const [loading, setLoading] = useState(true);
+  const fetchAddress = async (lat, lng) => {
+    const API_KEY = '511ee4a684a7432389e220e510e77a73'; // Replace with your OpenCage API Key
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat},${lng}&key=${API_KEY}`;
+    setLoading(false);
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+
+      if (data.results && data.results.length > 0) {
+        console.log('Address:', data.results[0].formatted); // Get the formatted address
+        setAddress(data.results[0].formatted);
+        return data.results[0].formatted;
+      } else {
+        console.log('No results found.');
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+    }
+  };
 
   useEffect(() => {
     if (lati && longi) {
-      getGeocodingData(lati, longi);
+      fetchAddress(lati, longi);
     }
   }, [lati, longi]);
   const [position, setposition] = useState({
@@ -137,69 +194,165 @@ const VerifyOtp = ({navigation}) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+  const marker1 = {latitude: lati, longitude: longi}; // Marker 1 coordinates
+  const marker2 = {
+    latitude: rideRequest?.pickuplocation.lat,
+    longitude: rideRequest?.pickuplocation.lng,
+  }; // Marker 2 coordinates
+
+  // Calculate the distance
+  const calculateDistance = (coord1, coord2) => {
+    const distance = haversine(coord1, coord2, {unit: 'km'});
+    return distance.toFixed(2); // Round off to 2 decimal places
+  };
+
+  // console.log('rideRequest', rideRequest);
+  const vehicleIcon = require('../Assets/carmap.png'); // Custom icon for vehicle
+  const userIcon = require('../Assets/walkman.png'); // Custom icon for user
+
+  const distance = calculateDistance(marker1, marker2);
+
+  const VerifyOtpSend = async () => {
+    if (!value)
+      return Toast.show({
+        type: ALERT_TYPE.DANGER,
+        textBody: 'Please enter otp!',
+      });
+    try {
+      const config = {
+        url: '/verifyOtpCustomer',
+        method: 'put',
+        baseURL: 'http://192.168.1.19:8051/api/v1/user',
+        headers: {'Content-Type': 'application/json'},
+        data: {
+          id: rideRequest?._id,
+          otp: parseInt(value),
+        },
+      };
+      let res = await axios(config);
+      if (res.status == 200) {
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Success',
+          textBody: 'Your are successfully verified and ride is start now.',
+          button: 'Ok',
+        });
+        await AsyncStorage.setItem(
+          'ride',
+          JSON.stringify({
+            ride: res.data.data,
+            driverLocation,
+            page: 'DriverTracking',
+          }),
+        );
+        setTimeout(() => {
+          navigation.navigate('DriverTracking');
+        }, 500);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Error',
+          textBody: error.response.data?.error || 'Something went wrong!',
+          button: 'Try Again!',
+        });
+      } else {
+        Dialog.show({
+          type: ALERT_TYPE.DANGER,
+          title: 'Error',
+          textBody: error.response.data?.error || 'Network Issue!',
+          button: 'Try Again!',
+        });
+      }
+    }
+  };
 
   return (
-    <View style={{flex: 1}}>
-      <MapView
-        ref={mapRef}
-        style={{flex: 1}}
-        initialRegion={position}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation={false}
-        showsMyLocationButton={false}
-        followsUserLocation={true}
-        showsCompass={true}
-        scrollEnabled={true}
-        zoomEnabled={true}
-        pitchEnabled={true}
-        rotateEnabled={true}>
-        {lati && longi && (
-          <Marker
-            coordinate={{
-              latitude: parseFloat(lati),
-              longitude: parseFloat(longi),
-            }}
-          />
-        )}
-      </MapView>
-
-      <View style={{backgroundColor: 'white', paddingHorizontal: 20}}>
-        <CodeField
-          ref={ref}
-          {...props}
-          caretHidden={false}
-          value={value}
-          onChangeText={setValue}
-          cellCount={CELL_COUNT}
-          rootStyle={styles.codeFieldRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          autoComplete={Platform.select({
-            android: 'sms-otp',
-            default: 'one-time-code',
-          })}
-          testID="my-code-input"
-          renderCell={({index, symbol, isFocused}) => (
-            <Text
-              key={index}
-              style={[styles.cell, isFocused && styles.focusCell]}
-              onLayout={getCellOnLayoutHandler(index)}>
-              {symbol || (isFocused ? <Cursor /> : null)}
-            </Text>
+    <AlertNotificationRoot>
+      <View style={{flex: 1}}>
+        <MapView
+          ref={mapRef}
+          style={{flex: 1}}
+          initialRegion={position}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation={false}
+          showsMyLocationButton={false}
+          followsUserLocation={true}
+          showsCompass={true}
+          scrollEnabled={true}
+          zoomEnabled={true}
+          pitchEnabled={true}
+          rotateEnabled={true}>
+          {lati && longi && (
+            <Marker
+              coordinate={{
+                latitude: parseFloat(lati),
+                longitude: parseFloat(longi),
+              }}
+              title={address}>
+              <Image
+                source={vehicleIcon}
+                style={styles.markerIcon} // Apply style for resizing
+                resizeMode="contain" // Ensures aspect ratio is maintained
+              />
+            </Marker>
           )}
-        />
-        <AnimatedButton
-          title="Start ride"
-          style={{
-            marginTop: 28,
-            marginBottom: 4,
-          }}
-          onPress={() => {
-            navigation.navigate('DriverTracking');
-          }}
-        />
+          {rideRequest?.pickuplocation && (
+            <Marker
+              coordinate={marker2}
+              title={rideRequest?.pickuplocation?.address}>
+              <Image
+                source={userIcon}
+                style={styles.markerIcon} // Apply style for resizing
+                resizeMode="contain" // Ensures aspect ratio is maintained
+              />
+            </Marker>
+          )}
+        </MapView>
+
+        <View style={{backgroundColor: 'white', paddingHorizontal: 20}}>
+          <CodeField
+            ref={ref}
+            {...props}
+            caretHidden={false}
+            value={value}
+            onChangeText={setValue}
+            cellCount={CELL_COUNT}
+            rootStyle={styles.codeFieldRoot}
+            keyboardType="number-pad"
+            textContentType="oneTimeCode"
+            autoComplete={Platform.select({
+              android: 'sms-otp',
+              default: 'one-time-code',
+            })}
+            testID="my-code-input"
+            renderCell={({index, symbol, isFocused}) => (
+              <Text
+                key={index}
+                style={[styles.cell, isFocused && styles.focusCell]}
+                onLayout={getCellOnLayoutHandler(index)}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            )}
+          />
+          <AnimatedButton
+            title="Start ride"
+            style={{
+              marginTop: 28,
+              marginBottom: 4,
+            }}
+            onPress={() => VerifyOtpSend()}
+          />
+        </View>
+        {loading && (
+          <View style={styles.overlay}>
+            <ActivityIndicator size="large" color="green" />
+          </View>
+        )}
       </View>
-    </View>
+    </AlertNotificationRoot>
   );
 };
 
@@ -219,7 +372,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 10,
   },
+  markerIcon: {
+    width: 60, // Resize the icon width
+    height: 60, // Resize the icon height
+  },
   focusCell: {
     borderColor: '#000',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000, // Ensure the overlay is above all other UI elements
   },
 });

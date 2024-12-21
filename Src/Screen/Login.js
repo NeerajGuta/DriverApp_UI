@@ -11,7 +11,9 @@ import {
   Button,
   Alert,
   ToastAndroid,
+  BackHandler,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Color from '../Constant/Color';
@@ -19,20 +21,47 @@ import AnimatedButton from '../Constant/Button';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {
   ALERT_TYPE,
   Dialog,
   AlertNotificationRoot,
   Toast,
 } from 'react-native-alert-notification';
+import {useDriverContext} from '../Context/DriverContext'; // Import context
 
 const Login = () => {
   const navigation = useNavigation();
+  const {setDriverId: setContextDriverId} = useDriverContext(); // Get context function
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        setModalVisible(true); // Show the modal when back is pressed
+        return true; // Prevent default back action
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, []),
+  );
+
+  const closeApp = () => {
+    setModalVisible(false);
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Splacescreen'}],
+    });
+    setTimeout(() => BackHandler.exitApp(), 500);
+  };
   const login = async () => {
     try {
       if (!email)
@@ -61,7 +90,7 @@ const Login = () => {
       if (res.status === 200) {
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
-          title: 'Error',
+          title: 'Success',
           textBody: 'Successfully login',
           button: 'Ok!',
         });
@@ -73,6 +102,7 @@ const Login = () => {
             });
           } else {
             navigation.navigate('Home');
+            // setContextDriverId(res.data.driver?._id);
           }
         }, 1000);
 
@@ -110,7 +140,8 @@ const Login = () => {
                 flexDirection: 'row',
                 gap: 50,
               }}>
-              <TouchableOpacity onPress={() => navigation.goBack('')}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Splacescreen')}>
                 <Feather name="arrow-left" size={20} color={Color.black} />
               </TouchableOpacity>
               <Text
@@ -186,6 +217,31 @@ const Login = () => {
               </View>
             </ScrollView>
           </View>
+
+          <Modal
+            isVisible={isModalVisible}
+            onBackdropPress={() => setModalVisible(false)} // Close when tapping outside
+            animationIn="slideInUp"
+            animationOut="slideOutDown">
+            <View style={styles.modalContent}>
+              <Text style={styles.title}>Exit App</Text>
+              <Text style={styles.message}>
+                Are you sure you want to close the app?
+              </Text>
+              <View style={styles.buttonRow}>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.confirmButton]}
+                  onPress={closeApp}>
+                  <Text style={styles.confirmText}>Yes</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </SafeAreaView>
       </AlertNotificationRoot>
     </GestureHandlerRootView>
@@ -315,5 +371,49 @@ const styles = StyleSheet.create({
   },
   gallercam: {
     alignItems: 'center',
+  },
+
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  message: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#f5f5f5',
+  },
+  confirmButton: {
+    backgroundColor: '#ff5252',
+  },
+  cancelText: {
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  confirmText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
