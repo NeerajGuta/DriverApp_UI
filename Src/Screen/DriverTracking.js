@@ -31,6 +31,7 @@ import {
 
 const DriverTracking = ({navigation}) => {
   const mapRef = useRef(null); // Initialize mapRef with null
+  // console.log("check")d
   const {
     driverLocation,
     getLocation,
